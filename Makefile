@@ -19,6 +19,7 @@ $(TARGET): $(OBJS)
 %.o: %.cpp
 	@echo "컴파일 중: $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+	
 #헤더 의존성
 main.o: Movie.h User.h Rating.h
 Movie.o: Movie.h

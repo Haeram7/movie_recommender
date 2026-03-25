@@ -7,4 +7,6 @@ movie_app
 # 에디터 및 임시 파일
 *~
 *.swp
+.vscode/
+.idea/
 .DS_Store

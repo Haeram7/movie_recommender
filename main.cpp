@@ -6,7 +6,7 @@
 #include <string>
 
 int main() {
-    // 
+    // 각 객체로 이루어진 벡터 선언
     std::vector<Movie> movies;
     std::vector<User> users;
     std::vector<Rating> ratings;
