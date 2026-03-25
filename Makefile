@@ -19,8 +19,8 @@ $(TARGET): $(OBJS)
 %.o : %.cpp
 	@echo "컴파일 중: $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-#헤더 의존성 / 각 .o 파일이 해당하는 .h 파일에 의존하도록 설정
+	
+# 헤더 의존성 / 각 .o 파일이 해당하는 .h 파일에 의존하도록 설정
 main.o: Movie.h User.h Rating.h
 Movie.o: Movie.h
 User.o: User.h
