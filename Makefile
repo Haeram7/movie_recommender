@@ -5,7 +5,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -g
 # 파일 설정
 TARGET = movie_app
 SRCS = main.cpp Movie.cpp User.cpp Rating.cpp
-OBJS = $(SRCS:.cpp=.o)
+OBJS = main.o Movie.o User.o Rating.o	
 
 # 기본 타겟
 all: $(TARGET)
@@ -15,12 +15,12 @@ $(TARGET): $(OBJS)
 	@echo "링크 중: $^"
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# 패턴 규칙: 모든 .o파일 생성 규칙
-%.o: %.cpp
+# 패턴 규칙
+%.o : %.cpp
 	@echo "컴파일 중: $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-	
-#헤더 의존성
+
+#헤더 의존성 / 각 .o 파일이 해당하는 .h 파일에 의존하도록 설정
 main.o: Movie.h User.h Rating.h
 Movie.o: Movie.h
 User.o: User.h
