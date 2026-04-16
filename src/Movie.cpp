@@ -19,6 +19,17 @@ std::string Movie::getTitle()        const { return title; }
 std::string Movie::getGenre()        const { return genre; }
 int         Movie::getReleaseYear()  const { return releaseYear; }
 int         Movie::getRatingCount()  const { return ratingCount; }
+void Movie::setReleaseYear(int year) { 
+    if(year < 1888 || year > 2100) { // 영화의 역사적 시작과 미래 예측 범위
+        std::cout << "Warning: Invalid release year: " << year << '\n'
+                  << "Setting to default year." << std::endl;
+        releaseYear = 0; // 유효성 검사 실패 시 기본값
+        return;
+    }
+    else {
+        releaseYear = year;
+    }
+}
 
 double Movie::getAverageRating() const {
     if (ratingCount == 0) return 0.0;   // 0 나눗셈 방어
@@ -41,4 +52,38 @@ void Movie::display() const {
               << "  Ratings: " << getAverageRating()
               << " (" << ratingCount << " reviews)"
               << std::endl;
+}
+
+bool Movie::operator <(const Movie& other) const {
+    if(this->getAverageRating() != other.getAverageRating()) {
+        return this->getAverageRating() < other.getAverageRating();
+    }
+    return this->getTitle() < other.getTitle();
+}
+
+bool Movie::operator > (const Movie& other) const {
+    return other < *this; // < 연산자 재활용
+}
+
+bool Movie::operator ==(const Movie& other) const {
+    return this ->getTitle() == other.getTitle() && 
+           this ->getReleaseYear() == other.getReleaseYear();
+}
+
+bool Movie::operator !=(const Movie& other) const {
+    return !(*this == other);
+}
+
+bool Movie::operator <=(const Movie& other) const {
+    return !(*this > other);
+}
+
+bool Movie::operator >=(const Movie& other) const {
+    return !(*this < other);
+}
+
+std::ostream& operator<<(std::ostream& os, const Movie& m) const {
+    os << m.getTitle() << " (" << m.getReleaseYear() << ") - "
+       << m.getAverageRating() << " (" << m.getRatingCount() << " reviews)";
+    return os;
 }
