@@ -22,7 +22,7 @@ int         Movie::getRatingCount()  const { return ratingCount; }
 
 double Movie::getAverageRating() const {
     if (ratingCount == 0) return 0.0;   // 0 나눗셈 방어
-    return totalRating / ratingCount;
+    return totalRating / ratingCount;   
 }
 
 void Movie::addRating(double r) {
@@ -35,7 +35,7 @@ void Movie::addRating(double r) {
     ratingCount++;
 }
 
-void Movie::display() const {           // 중복 제거 — 하나만 유지
+void Movie::display() const {           
     std::cout << id << ". " << title
               << " (" << releaseYear << ")"
               << "  Ratings: " << getAverageRating()
