@@ -21,8 +21,8 @@ int         Movie::getReleaseYear()  const { return releaseYear; }
 int         Movie::getRatingCount()  const { return ratingCount; }
 void Movie::setReleaseYear(int year) { 
     if(year < 1888 || year > 2100) { // 영화의 역사적 시작과 미래 예측 범위
-        std::cout << "Warning: Invalid release year: " << year << '\n'
-                  << "Setting to default year." << std::endl;
+        std::cout << "경고: 유효하지 않은 개봉 연도: " << year << '\n'
+                  << "기본 연도로 설정합니다." << std::endl;
         releaseYear = 0; // 유효성 검사 실패 시 기본값
         return;
     }
@@ -38,8 +38,8 @@ double Movie::getAverageRating() const {
 
 void Movie::addRating(double r) {
     if (r < 0.0 || r > 5.0) {
-        std::cout << "Warning: Invalid score: " << r << '\n'
-                  << "Must be 0.0 to 5.0"<< std::endl;
+        std::cout << "경고: 유효하지 않은 점수: " << r << '\n'
+                  << "0.0에서 5.0 사이의 값이어야 합니다." << std::endl;
         return;    // 유효성 검사
     }
     totalRating += r;
@@ -49,8 +49,8 @@ void Movie::addRating(double r) {
 void Movie::display() const {           
     std::cout << id << ". " << title
               << " (" << releaseYear << ")"
-              << "  Ratings: " << getAverageRating()
-              << " (" << ratingCount << " reviews)"
+              << "  평점: " << getAverageRating()
+              << " (" << ratingCount << " 개의 평가)"
               << std::endl;
 }
 
@@ -84,6 +84,6 @@ bool Movie::operator >=(const Movie& other) const {
 
 std::ostream& operator<<(std::ostream& os, const Movie& m) const {
     os << m.getTitle() << " (" << m.getReleaseYear() << ") - "
-       << m.getAverageRating() << " (" << m.getRatingCount() << " reviews)";
+       << m.getAverageRating() << " (" << m.getRatingCount() << " 개의 평가)";
     return os;
 }

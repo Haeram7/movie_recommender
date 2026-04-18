@@ -6,8 +6,8 @@ Rating::Rating()
 Rating::Rating(int ui, int mi, double s)
  : userID(ui), movieID(mi), score(s) {
     if (s<0.0 || s>5.0) {
-        std::cout << "Warning: Invalid score: " << s << '\n'
-                  << "Must be 0.0 to 5.0, Setting to 0.0" << std::endl;
+        std::cout << "경고: 유효하지 않은 점수: " << s << '\n'
+                  << "0.0에서 5.0 사이의 값이어야 합니다. 기본값으로 설정합니다." << std::endl;
         score = 0.0; // 유효성 검사 실패 시 기본값
     } 
 }
@@ -17,7 +17,7 @@ int Rating::getMovieID() const { return movieID; }
 double Rating::getScore() const { return score; }
 
 void Rating::display() const {
-    std::cout << "UserID : " << userID << '\n'
-              << "Rated MovieID : " << movieID << '\n'
-              << "Score : " << score << '\n' << "-----------------" << std::endl;
+    std::cout << "사용자 ID : " << userID << '\n'
+              << "평가된 영화 ID : " << movieID << '\n'
+              << "점수 : " << score << '\n' << "-----------------" << std::endl;
 }                           
