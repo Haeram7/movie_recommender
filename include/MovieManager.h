@@ -12,5 +12,6 @@ public:
     void removeMovie(const std::string &title);
     void printAll() const;
     void sortbyRating();
-    Movie* findbyTitle(const std::string& title) const;
+    std::vector<Movie> findbyTitle(const std::string& title) const;
+    Movie* findExactTitle(const std::string &title) const;
 }

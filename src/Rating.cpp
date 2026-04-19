@@ -20,4 +20,18 @@ void Rating::display() const {
     std::cout << "사용자 ID : " << userID << '\n'
               << "평가된 영화 ID : " << movieID << '\n'
               << "점수 : " << score << '\n' << "-----------------" << std::endl;
-}                           
+}
+bool Rating::operator<(const Rating& other) const {
+    if(this->score != other.score) {
+        return this->score < other.score; // 점수로 정렬
+    }
+    else {
+        return this->movieID < other.movieID; // 점수가 같으면 영화 ID로 정렬
+    }
+}
+
+std::ostream& operator<<(std::ostream& os, const Rating& r) {
+    os << "사용자 ID : " << r.userID << '\n'
+       << "점수 : " << r.score;
+    return os;
+}

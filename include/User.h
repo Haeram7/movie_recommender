@@ -2,12 +2,13 @@
 #include <string>
 class User {
     private :
+        static int nextID; // 고유 ID 생성을 위한 정적 멤버 변수
         int id;
         std::string name;
         std::string email;
     public :
         User();
-        User(int ID, const std::string &n, const std::string &e);
+        User(const std::string &n, const std::string &e);
         int getID() const;
         std::string getName() const;
         std::string getEmail() const;

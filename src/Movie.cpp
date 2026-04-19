@@ -1,6 +1,7 @@
 #include "Movie.h"
 #include <iostream>
 
+int Movie::nextID = 1; // 정적 멤버 변수 초기화
 // 기본 생성자
 Movie::Movie()
     : id(0),
@@ -8,9 +9,9 @@ Movie::Movie()
       totalRating(0.0), ratingCount(0) {} // 초기화 리스트로 기본값 설정
 
 // 4인자 생성자
-Movie::Movie(int id, const std::string& title,
+Movie::Movie(const std::string& title,
              const std::string& genre, int year)
-    : id(id), title(title), genre(genre),
+    : id(nextID++), title(title), genre(genre),
       releaseYear(year),
       totalRating(0.0), ratingCount(0) {}
 
