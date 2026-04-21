@@ -8,9 +8,9 @@ class UserManager {
     public:
         UserManager();
         void addUser(const User &u);
-        User* findbyName(const std::string &name) const;
+        User* findbyName(const std::string &name);
         void sortbyName();
         void printAll() const;
-
+        
        
-}
+};

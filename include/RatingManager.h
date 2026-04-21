@@ -1,13 +1,15 @@
 #pragma once
 #include <iostream>
+#include "Rating.h"
 #include <vector>
 
 class RatingManager {
     private:
         std::vector<Rating> ratings;
     public:
-        RatingManager() {};
+        RatingManager();
         void addRating(const Rating& r);
-        void displaybyMovie(const std::string& title) const;
+        void displaybyMovie(const int id) const;
         void sortbyScore();
-}
+        bool hasAlreadyRated(int userId, int movieId) const;
+};

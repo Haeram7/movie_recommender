@@ -12,6 +12,7 @@ void MovieManager::addMovie(const Movie& m) {
         }
     }
     movies.push_back(m);
+    std::cout << "영화가 추가되었습니다: " << m.getTitle() << std::endl;
 }
 
 
@@ -53,12 +54,11 @@ std::vector<Movie> MovieManager::findbyTitle(const std::string &title) const{
     return results;
 }
 
-Movie* MovieManager::findExactTitle(const std::string &title) const {
-    for (auto m : movies) { 
-        if (m->getTitle() == title) {
-            return m; // 힙에 있는 실제 객체 주소를 그대로 반환 (안전함!)
+Movie* MovieManager::findExactTitle(const std::string &title) {
+    for (auto &m : movies) { 
+        if (m.getTitle() == title) {
+            return &m; // 일치하는 영화가 있으면 해당 영화 객체의 포인터를 반환
         }
     }
-    std::cout << "해당 제목의 영화가 목록에 없습니다." << std::endl;
     return nullptr;
 }

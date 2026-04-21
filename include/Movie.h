@@ -16,7 +16,7 @@ public:
     Movie(const std::string& title,
           const std::string& genre, int year);
 
-    int         getId()              const;
+    int         getID()              const;
     std::string getTitle()           const;
     std::string getGenre()           const;
     int         getReleaseYear()     const;  // getYear → getReleaseYear
@@ -33,5 +33,5 @@ public:
     bool operator !=(const Movie& other) const;
     bool operator <=(const Movie& other) const;
     bool operator >=(const Movie& other) const;
-    friend std::ostream& operator<<(std::ostream& os, const Movie& m) const;
+    friend std::ostream& operator<<(std::ostream& os, const Movie& m);
     };

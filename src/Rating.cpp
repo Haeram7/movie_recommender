@@ -5,9 +5,9 @@ Rating::Rating()
 
 Rating::Rating(int ui, int mi, double s)
  : userID(ui), movieID(mi), score(s) {
-    if (s<0.0 || s>5.0) {
+    if (s<0.0 || s>10.0) {
         std::cout << "경고: 유효하지 않은 점수: " << s << '\n'
-                  << "0.0에서 5.0 사이의 값이어야 합니다. 기본값으로 설정합니다." << std::endl;
+                  << "0.0에서 10.0 사이의 값이어야 합니다. 기본값 0.0으로 설정합니다." << std::endl;
         score = 0.0; // 유효성 검사 실패 시 기본값
     } 
 }
@@ -31,7 +31,7 @@ bool Rating::operator<(const Rating& other) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Rating& r) {
-    os << "사용자 ID : " << r.userID << '\n'
+    os << "사용자 ID : " << r.userID << ' '
        << "점수 : " << r.score;
     return os;
 }

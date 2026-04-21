@@ -15,7 +15,7 @@ Movie::Movie(const std::string& title,
       releaseYear(year),
       totalRating(0.0), ratingCount(0) {}
 
-int         Movie::getId()           const { return id; }
+int         Movie::getID()           const { return id; }
 std::string Movie::getTitle()        const { return title; }
 std::string Movie::getGenre()        const { return genre; }
 int         Movie::getReleaseYear()  const { return releaseYear; }
@@ -38,9 +38,9 @@ double Movie::getAverageRating() const {
 }
 
 void Movie::addRating(double r) {
-    if (r < 0.0 || r > 5.0) {
+    if (r < 0.0 || r > 10.0) {
         std::cout << "경고: 유효하지 않은 점수: " << r << '\n'
-                  << "0.0에서 5.0 사이의 값이어야 합니다." << std::endl;
+                  << "0.0에서 10.0 사이의 값이어야 합니다." << std::endl;
         return;    // 유효성 검사
     }
     totalRating += r;
@@ -83,8 +83,8 @@ bool Movie::operator >=(const Movie& other) const {
     return !(*this < other);
 }
 
-std::ostream& operator<<(std::ostream& os, const Movie& m) const {
+std::ostream& operator<<(std::ostream& os, const Movie& m) {
     os << m.getTitle() << " (" << m.getReleaseYear() << ") - "
-       << m.getAverageRating() << " (" << m.getRatingCount() << " 개의 평가)";
+       << m.getAverageRating() << " (" << m.getRatingCount() << " 개의 평가)" << '\n' << "---------------------------";
     return os;
 }

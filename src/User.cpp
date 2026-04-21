@@ -4,9 +4,9 @@
 int User::nextID = 1; // 정적 멤버 변수 초기화
 
 User::User() 
-    : id(0), name(""), email("") {}
+    : name(""), email("") {}
 
-User::User(int ID, const std::string &n, const std::string &e) 
+User::User(const std::string &n, const std::string &e) 
     : id(nextID++), name(n), email(e) {}
 
 int User::getID() const { return id; }
@@ -30,7 +30,7 @@ bool User:: operator >(const User& other) const {
 std::ostream& operator<<(std::ostream& os, const User& u) {
     os << "ID: " << u.id 
        << "\n이름: " << u.name
-       << "\n이메일: " << u.email;
+       << "\n이메일: " << u.email << '\n' << "--------------------------";
     return os;
 }   
 
