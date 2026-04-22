@@ -62,3 +62,7 @@ Movie* MovieManager::findExactTitle(const std::string &title) {
     }
     return nullptr;
 }
+
+bool MovieManager::isempty() const {
+    return movies.empty(); // 영화 목록이 비어있는지 여부 반환
+}

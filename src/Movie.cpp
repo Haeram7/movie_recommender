@@ -13,7 +13,13 @@ Movie::Movie(const std::string& title,
              const std::string& genre, int year)
     : id(nextID++), title(title), genre(genre),
       releaseYear(year),
-      totalRating(0.0), ratingCount(0) {}
+      totalRating(0.0), ratingCount(0) {
+        if(year < 1888 || year > 2100) { // 영화의 역사적 시작과 미래 예측 범위
+            std::cout << "경고: 유효하지 않은 개봉 연도: " << year << '\n'
+                      << "기본 연도(2020)로 설정합니다." << std::endl;
+            releaseYear = 2000; // 유효성 검사 실패 시 기본값
+        }
+      }
 
 int         Movie::getID()           const { return id; }
 std::string Movie::getTitle()        const { return title; }

@@ -12,5 +12,5 @@ class Rating {
         double getScore() const;
         void display() const;
         bool operator <(const Rating& other) const;
-        friend std::ostream& operator<<(std::ostream& os, const Rating& r);
+        
 };

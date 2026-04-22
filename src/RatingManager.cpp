@@ -10,8 +10,8 @@ void RatingManager::addRating(const Rating& r) {
 void RatingManager:: sortbyScore() {
     std::sort(ratings.begin(), ratings.end());
 }
-
-void RatingManager::displaybyMovie(const int id) const {
+void RatingManager::displaybyMovie(int id, const std::string& title, const UserManager& userMgr) const {
+    
     std::vector<Rating> filteredRatings;
 
     for(const auto &r : ratings) {
@@ -20,16 +20,22 @@ void RatingManager::displaybyMovie(const int id) const {
         }
     }
 
+    // 검색된 결과가 없는 경우 처리
     if(filteredRatings.empty()) {
         std::cout << "해당 영화에 대한 평가가 없습니다." << std::endl;
         return;
     }
 
+    // 점수순 정렬 (Rating::operator< 사용)
     std::sort(filteredRatings.begin(), filteredRatings.end());
 
-    std::cout << "=== 영화 [" << filteredRatings.front().getMovieID() << "] 평점 목록 ===" << std::endl;
+    // 제목 및 상세 평점 목록 출력
+    std::cout << "=== 영화 [" << title << "] 평점 목록 ===" << std::endl;
     for(const auto &r : filteredRatings) {
-        std::cout << r << std::endl; 
+        const User* user = userMgr.findbyId(r.getUserID());
+        std::string name = (user != nullptr) ? user->getName() : "알 수 없는 사용자";
+
+        std::cout << "평가한 사용자: " << name << ", 평점: " << r.getScore() << std::endl;
     }
 }
 

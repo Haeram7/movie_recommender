@@ -14,4 +14,5 @@ public:
     void sortbyRating();
     std::vector<Movie> findbyTitle(const std::string& title) const;
     Movie* findExactTitle(const std::string &title);
+    bool isempty() const;
 };

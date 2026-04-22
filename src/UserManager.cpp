@@ -35,3 +35,16 @@ void UserManager::printAll() const {
         std::cout << u << std::endl; // User 클래스의 operator << 오버로딩을 이용하여 사용자 정보 출력
  }
 }
+
+bool UserManager::isempty() const {
+    return users.empty(); // 사용자 목록이 비어있는지 여부 반환
+}
+
+const User* UserManager::findbyId(int id) const {
+    for (const auto &u : users) {
+        if (u.getID() == id) {
+            return &u; // const User* 타입을 반환하게 됩니다.
+        }
+    }
+    return nullptr;
+}

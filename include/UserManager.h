@@ -11,6 +11,6 @@ class UserManager {
         User* findbyName(const std::string &name);
         void sortbyName();
         void printAll() const;
-        
-       
+        bool isempty() const;
+        const User* findbyId(int id) const;
 };

@@ -16,7 +16,7 @@ void handleAddMovie(MovieManager& movieMgr) {
     std::getline(std::cin, genre);
     std::cout << "개봉 연도: ";
     std::cin >> year;
-    std::cin.ignore(); // 버퍼 정리
+    std::cin.ignore(100, '\n'); // 버퍼 정리
 
     Movie newMovie(title, genre, year);
     movieMgr.addMovie(newMovie);
@@ -30,7 +30,7 @@ void handleRemoveMovie(MovieManager& movieMgr) {
 }
 // 3. 제목으로 검색
 void handleSearchMovie(const MovieManager& movieMgr) {
-    if(movieMgr.findbyTitle("").empty()) {
+    if(movieMgr.isempty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -50,7 +50,7 @@ void handleSearchMovie(const MovieManager& movieMgr) {
 }
 // 4. 전체 목록 출력
 void handlePrintMovies(const MovieManager& movieMgr) {
-    if(movieMgr.findbyTitle("").empty()) {
+    if(movieMgr.isempty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -59,7 +59,7 @@ void handlePrintMovies(const MovieManager& movieMgr) {
 }
 // 5. 평점순 정렬 출력
 void handleSortMovies(MovieManager& movieMgr) {
-    if(movieMgr.findbyTitle("").empty()) {
+    if(movieMgr.isempty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -80,6 +80,10 @@ void handleAddUser(UserManager& userMgr) {
 }
 // 7. 사용자 목록 출력
 void handlePrintUsers(const UserManager& userMgr) {
+    if(userMgr.isempty()) {
+        std::cout << "사용자 목록이 비어 있습니다." << std::endl;
+        return;
+    }
     std::cout << " ===== 사용자 목록 =====\n";
     userMgr.printAll();
 }
@@ -109,7 +113,7 @@ void handleAddRating(RatingManager& ratingMgr, UserManager& userMgr, MovieManage
     }
     std::cout << "점수 입력 (0.0 - 10.0): ";
     std::cin >> score;
-    std::cin.ignore(); // 버퍼 정리
+    std::cin.ignore(100, '\n'); // 버퍼 정리
 
     Rating newRating(user->getID(), movie->getID(), score);
     ratingMgr.addRating(newRating);
@@ -117,8 +121,8 @@ void handleAddRating(RatingManager& ratingMgr, UserManager& userMgr, MovieManage
     std::cout << "평점이 추가되었습니다. 업데이트된 평점 : " << movie->getAverageRating() << std::endl;
 }
 // 9. 영화별 평점 보기
-void handleDisplayRatingsByMovie(RatingManager& ratingMgr, MovieManager& movieMgr) {
-    if(movieMgr.findbyTitle("").empty()) {
+void handleDisplayRatingsByMovie(RatingManager& ratingMgr, MovieManager& movieMgr, UserManager& userMgr) {
+    if(movieMgr.isempty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -126,12 +130,15 @@ void handleDisplayRatingsByMovie(RatingManager& ratingMgr, MovieManager& movieMg
     std::string movieTitle;
     std::cout << "평점을 볼 영화 제목: ";
     std::getline(std::cin, movieTitle);
-    Movie* movie = movieMgr.findExactTitle(movieTitle);
+
+    Movie* movie = movieMgr.findExactTitle(movieTitle); 
+
     if (movie != nullptr) {
-        ratingMgr.displaybyMovie(movie -> getID());
+        // 137번 줄: 이제 userMgr를 정상적으로 인식합니다.
+        ratingMgr.displaybyMovie(movie->getID(), movie->getTitle(), userMgr);
     } else {
         std::cout << "일치하는 영화가 목록에 없습니다." << std::endl;
-    } return; // 영화 없으면 종료
+    }
 }
 
 int main() {
@@ -141,14 +148,14 @@ int main() {
     int choice = -1;
     while(true) {
     
-        std::cout << "=== Movie Recommender System === \n\n" 
+        std::cout << "==== Movie Recommender System ==== \n\n" 
                 << "[ 영화 ]\n" <<  " 1. 영화 추가 \n" << " 2. 영화 제거 \n" << " 3. 제목으로 검색 \n" 
                 << " 4. 전체 목록 출력 \n" << " 5. 평점순 정렬 출력 \n\n"
                 << "[ 사용자 ]\n" << " 6. 사용자 추가 \n" << " 7. 사용자 목록 출력 \n\n"
                 << "[ 평점 ] \n" << " 8. 평점 입력 \n" << " 9. 영화별 평점 보기 \n\n" 
                 << " 0. 종료 \n\n" << " 선택 > "; 
         std::cin >> choice;
-        std::cin.ignore(); // 버퍼 정리
+        std::cin.ignore(100, '\n'); // 버퍼 제거
         if(choice == 0) {
             std::cout << "프로그램을 종료합니다." << std::endl;
             break;
@@ -162,16 +169,13 @@ int main() {
             case 6: handleAddUser(userMgr); break;
             case 7: handlePrintUsers(userMgr); break;
             case 8: handleAddRating(ratingMgr, userMgr, movieMgr); break;
-            case 9: handleDisplayRatingsByMovie(ratingMgr, movieMgr); break;
+            case 9: handleDisplayRatingsByMovie(ratingMgr, movieMgr, userMgr); break;
             default: std::cout << "잘못된 선택입니다. 다시 시도해주세요." << std::endl; break;
         }
         // 기능을 수행한 후 메뉴로 돌아가기 전
     std::cout << "\n작업 완료. [엔터를 누르시면 메뉴로 돌아갑니다]";
 
-    // 1. 버퍼에 남아있는 찌꺼기를 싹 비웁니다. (100글자 한도, 엔터 만날 때까지)
-    //std::cin.ignore(100, '\n'); 
-
-    // 2. 사용자가 새롭게 엔터를 칠 때까지 화면을 멈추고 기다립니다.
+    // 사용자가 새롭게 엔터를 칠 때까지 화면을 멈춤
     std::cin.get();   
     }
     return 0;

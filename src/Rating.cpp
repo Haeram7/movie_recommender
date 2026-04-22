@@ -29,9 +29,3 @@ bool Rating::operator<(const Rating& other) const {
         return this->movieID < other.movieID; // 점수가 같으면 영화 ID로 정렬
     }
 }
-
-std::ostream& operator<<(std::ostream& os, const Rating& r) {
-    os << "사용자 ID : " << r.userID << ' '
-       << "점수 : " << r.score;
-    return os;
-}
