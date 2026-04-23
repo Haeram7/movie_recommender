@@ -115,6 +115,7 @@ void handleAddRating(RatingManager& ratingMgr, UserManager& userMgr, MovieManage
     std::cin >> score;
     std::cin.ignore(100, '\n'); // 버퍼 정리
 
+
     Rating newRating(user->getID(), movie->getID(), score);
     ratingMgr.addRating(newRating);
     movie->addRating(score); // 영화의 평점 업데이트
@@ -134,7 +135,7 @@ void handleDisplayRatingsByMovie(RatingManager& ratingMgr, MovieManager& movieMg
     Movie* movie = movieMgr.findExactTitle(movieTitle); 
 
     if (movie != nullptr) {
-        // 137번 줄: 이제 userMgr를 정상적으로 인식합니다.
+
         ratingMgr.displaybyMovie(movie->getID(), movie->getTitle(), userMgr);
     } else {
         std::cout << "일치하는 영화가 목록에 없습니다." << std::endl;
