@@ -30,7 +30,7 @@ void handleRemoveMovie(MovieManager& movieMgr) {
 }
 // 3. 제목으로 검색
 void handleSearchMovie(const MovieManager& movieMgr) {
-    if(movieMgr.isempty()) {
+    if(movieMgr.isEmpty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -50,7 +50,7 @@ void handleSearchMovie(const MovieManager& movieMgr) {
 }
 // 4. 전체 목록 출력
 void handlePrintMovies(const MovieManager& movieMgr) {
-    if(movieMgr.isempty()) {
+    if(movieMgr.isEmpty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -59,7 +59,7 @@ void handlePrintMovies(const MovieManager& movieMgr) {
 }
 // 5. 평점순 정렬 출력
 void handleSortMovies(MovieManager& movieMgr) {
-    if(movieMgr.isempty()) {
+    if(movieMgr.isEmpty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -80,7 +80,7 @@ void handleAddUser(UserManager& userMgr) {
 }
 // 7. 사용자 목록 출력
 void handlePrintUsers(const UserManager& userMgr) {
-    if(userMgr.isempty()) {
+    if(userMgr.isEmpty()) {
         std::cout << "사용자 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -123,7 +123,7 @@ void handleAddRating(RatingManager& ratingMgr, UserManager& userMgr, MovieManage
 }
 // 9. 영화별 평점 보기
 void handleDisplayRatingsByMovie(RatingManager& ratingMgr, MovieManager& movieMgr, UserManager& userMgr) {
-    if(movieMgr.isempty()) {
+    if(movieMgr.isEmpty()) {
         std::cout << "영화 목록이 비어 있습니다." << std::endl;
         return;
     }
@@ -147,6 +147,11 @@ int main() {
     UserManager userMgr;
     RatingManager ratingMgr;
     int choice = -1;
+    // 프로그램 시작 시 파일에서 데이터 로드
+    movieMgr.loadFromFile("data/movies.csv");
+    userMgr.loadFromFile("data/users.csv");
+    ratingMgr.loadFromFile("data/ratings.csv");
+
     while(true) {
     
         std::cout << "==== Movie Recommender System ==== \n\n" 
@@ -179,6 +184,12 @@ int main() {
     // 사용자가 새롭게 엔터를 칠 때까지 화면을 멈춤
     std::cin.get();   
     }
+    
+    // 프로그램 종료 시 파일에 데이터 저장
+    movieMgr.saveToFile("data/movies.csv");
+    userMgr.saveToFile("data/users.csv");
+    ratingMgr.saveToFile("data/ratings.csv");
+
     return 0;
 }
     

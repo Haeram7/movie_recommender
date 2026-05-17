@@ -8,7 +8,8 @@ User::User()
 
 User::User(const std::string &n, const std::string &e) 
     : id(nextID++), name(n), email(e) {}
-    
+User::User(int id, const std::string &n, const std::string &e) 
+    : id(id), name(n), email(e) {}
 void User::setNextID(int num) {
     nextID = num;
 }

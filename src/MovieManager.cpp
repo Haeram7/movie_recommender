@@ -12,8 +12,12 @@ void MovieManager::printAll() const {
  }
 }
 
-bool MovieManager::isempty() const {
+bool MovieManager::isEmpty() const {
     return movies.empty(); // 영화 목록이 비어있는지 여부 반환
+}
+
+int MovieManager::size() const {
+    return movies.size(); // 영화 목록의 크기 반환
 }
 
 void MovieManager::loadFromFile(const std::string& filename) {
@@ -39,6 +43,7 @@ void MovieManager::loadFromFile(const std::string& filename) {
             continue; 
         }
     }
+    Movie::setNextID(movies.size() + 1); // 다음 ID는 현재 영화 수 + 1
     file.close();
 }
 
@@ -108,5 +113,14 @@ Movie* MovieManager::findExactTitle(const std::string &title) {
         }
     }
     return nullptr;
+}
+
+Movie* MovieManager::findbyId(int id) {
+    for (const auto &m : movies) {
+        if (m.getID() == id) {
+            return &m; // const Movie*를 Movie*로 변환하여 반환
+        }
+    }
+    return nullptr; // 일치하는 영화가 없는 경우 nullptr 반환
 }
 

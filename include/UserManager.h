@@ -11,6 +11,7 @@ class UserManager : public BaseManager {
         
         void printAll() const override;
         bool isEmpty() const override;
+        int size() const override;
         void loadFromFile(const std::string& filename) override;
         void saveToFile(const std::string& filename) const override;
 

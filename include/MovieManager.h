@@ -11,6 +11,7 @@ public:
 
     void printAll() const override;
     bool isEmpty() const override;
+    int size() const override;
     void loadFromFile(const std::string& filename) override;
     void saveToFile(const std::string& filename) const override;
 
@@ -19,4 +20,5 @@ public:
     void sortbyRating();
     std::vector<Movie> findbyTitle(const std::string& title) const;
     Movie* findExactTitle(const std::string &title);
+    Movie* findbyId(int id);
 };

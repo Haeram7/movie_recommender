@@ -1,8 +1,8 @@
 #include "UserManager.h"
 #include <iostream>
 #include <algorithm>
-#include <ifstream>
-#include <ofstream>
+#include <fstream>
+#include <sstream>
 
 UserManager::UserManager() {};
 
@@ -16,8 +16,12 @@ void UserManager::printAll() const {
  }
 }
 
-bool UserManager::isempty() const {
+bool UserManager::isEmpty() const {
     return users.empty(); // 사용자 목록이 비어있는지 여부 반환
+}
+
+int UserManager::size() const {
+    return users.size(); // 사용자 목록의 크기 반환
 }
 
 void UserManager::loadFromFile(const std::string& filename)  {
@@ -46,6 +50,7 @@ void UserManager::loadFromFile(const std::string& filename)  {
             continue; // 형식 오류는 건너뜀
         }
     }
+    User::setNextID(users.size() + 1); // 다음 ID는 현재 사용자 수 + 1
     file.close();
 }
 void UserManager::saveToFile(const std::string& filename) const {

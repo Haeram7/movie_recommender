@@ -16,6 +16,9 @@ bool RatingManager::isEmpty() const {
     return ratings.empty();
 }
 
+int RatingManager::size() const {
+    return ratings.size();
+}
 void RatingManager::loadFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -102,4 +105,18 @@ bool RatingManager::hasAlreadyRated(int userId, int movieId) const {
         }
     }
     return false; // 중복 없음
+}
+
+std::vector<Rating> RatingManager::getUserRatings(int userID) const {
+    std::vector<Rating> userRatings;
+    for (const auto& r : ratings) {
+        if (r.getUserID() == userID) {
+            userRatings.push_back(r);
+        }
+    }
+    return userRatings;
+}
+
+std::vector<Rating> RatingManager::getAllRatings() const {
+    return ratings; // 모든 평점 반환
 }

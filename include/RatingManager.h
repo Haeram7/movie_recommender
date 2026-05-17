@@ -12,6 +12,7 @@ class RatingManager : public BaseManager {
         RatingManager();
         void printAll() const override;
         bool isEmpty() const override;
+        int size() const override;
         void loadFromFile(const std::string& filename) override;
         void saveToFile(const std::string& filename) const override;
 
@@ -20,6 +21,7 @@ class RatingManager : public BaseManager {
         void sortbyScore();
         bool hasAlreadyRated(int userId, int movieId) const;
        
-       
+        std::vector<Rating> getUserRatings(int userID) const;
+        std::vector<Rating> getAllRatings() const;
         
 };
