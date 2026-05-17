@@ -8,7 +8,7 @@ Movie::Movie()
       title(""), genre(""), releaseYear(0),
       totalRating(0.0), ratingCount(0) {} // 초기화 리스트로 기본값 설정
 
-// 4인자 생성자
+// 평점 없는 생성자
 Movie::Movie(const std::string& title,
              const std::string& genre, int year)
     : id(nextID++), title(title), genre(genre),
@@ -17,9 +17,19 @@ Movie::Movie(const std::string& title,
         if(year < 1888 || year > 2100) { // 영화의 역사적 시작과 미래 예측 범위
             std::cout << "경고: 유효하지 않은 개봉 연도: " << year << '\n'
                       << "기본 연도(2020)로 설정합니다." << std::endl;
-            releaseYear = 2000; // 유효성 검사 실패 시 기본값
+            releaseYear = 2020; // 유효성 검사 실패 시 기본값
         }
       }
+Movie::Movie(const std::string& title, const std::string& genre,
+          int year, double totalRating, int ratingCount)
+    : id(nextID++), title(title), genre(genre),
+      releaseYear(year), totalRating(totalRating), ratingCount(ratingCount) {
+        if(year < 1888 || year > 2100) { // 영화의 역사적 시작과 미래 예측 범위
+            std::cout << "경고: 유효하지 않은 개봉 연도: " << year << '\n'
+                      << "기본 연도(2020)로 설정합니다." << std::endl;
+            releaseYear = 2020; // 유효성 검사 실패 시 기본값
+        }
+    }
 
 int         Movie::getID()           const { return id; }
 std::string Movie::getTitle()        const { return title; }
@@ -29,8 +39,8 @@ int         Movie::getRatingCount()  const { return ratingCount; }
 void Movie::setReleaseYear(int year) { 
     if(year < 1888 || year > 2100) { // 영화의 역사적 시작과 미래 예측 범위
         std::cout << "경고: 유효하지 않은 개봉 연도: " << year << '\n'
-                  << "기본 연도로 설정합니다." << std::endl;
-        releaseYear = 0; // 유효성 검사 실패 시 기본값
+                  << "기본 연도(2020)로 설정합니다." << std::endl;
+        releaseYear = 2020; // 유효성 검사 실패 시 기본값
         return;
     }
     else {
@@ -59,6 +69,10 @@ void Movie::display() const {
               << "  평점: " << getAverageRating()
               << " (" << ratingCount << " 개의 평가)"
               << std::endl;
+}
+
+void Movie::setNextID(int num) {
+    nextID = num;
 }
 
 bool Movie::operator <(const Movie& other) const {

@@ -12,5 +12,4 @@ class Rating {
         double getScore() const;
         void display() const;
         bool operator <(const Rating& other) const;
-        
 };

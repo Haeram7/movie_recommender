@@ -15,6 +15,8 @@ public:
     Movie();                    // 기본 생성자 추가
     Movie(const std::string& title,
           const std::string& genre, int year);
+    Movie(const std::string& title, const std::string& genre,
+          int year, double totalRating, int ratingCount); // 평점 포함 생성자 추가
 
     int         getID()              const;
     std::string getTitle()           const;
@@ -22,10 +24,10 @@ public:
     int         getReleaseYear()     const;  // getYear → getReleaseYear
     double      getAverageRating()   const;  // getRating → getAverageRating
     int         getRatingCount()     const;
-    void setReleaseYear(int year);  // 추가
-
-    void addRating(double r);               // 추가
+    void setReleaseYear(int year);  
+    void addRating(double r);               
     void display()               const;
+    static void setNextID(int num);
 
     bool operator <(const Movie& other) const;
     bool operator >(const Movie& other) const;

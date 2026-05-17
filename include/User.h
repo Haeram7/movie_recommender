@@ -9,6 +9,7 @@ class User {
     public :
         User();
         User(const std::string &n, const std::string &e);
+        static void setNextID(int num);
         int getID() const;
         std::string getName() const;
         std::string getEmail() const;

@@ -1,15 +1,66 @@
 #include "RatingManager.h"
 #include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 RatingManager:: RatingManager() {}
+
+void RatingManager::printAll() const {
+    for(const auto &r : ratings) {
+        r.display();
+    }
+}
+
+bool RatingManager::isEmpty() const {
+    return ratings.empty();
+}
+
+void RatingManager::loadFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "파일을 열 수 없습니다: " << filename << std::endl;
+        return;
+    }
+
+    std::string line;
+    getline(file, line); // 헤더 스킵
+    while(getline(file, line)) {
+        if (line.empty()) continue; // 빈 줄 방어
+        std::stringstream ss(line);
+        std::string token;
+        int userID, movieID;
+        double score;
+
+        try {
+            getline(ss, token, ','); userID = stoi(token);
+            getline(ss, token, ','); movieID = stoi(token);
+            getline(ss, token); score = stod(token);
+            ratings.emplace_back(userID, movieID, score);
+        }
+        catch(...) {
+            continue; // 형식 오류는 건너뜀
+        }
+    }
+    file.close();
+}
+void RatingManager::saveToFile(const std::string& filename) const {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "파일을 열 수 없습니다: " << filename << std::endl;
+        return;
+    }
+    file << "userID,movieID,score" << std::endl;
+    for(const auto &r : ratings) {
+        file << r.getUserID() << "," << r.getMovieID() << "," << r.getScore() << std::endl;
+    }
+    file.close();
+}
 
 void RatingManager::addRating(const Rating& r) {
     ratings.push_back(r);
 }
 
-void RatingManager:: sortbyScore() {
-    std::sort(ratings.begin(), ratings.end());
-}
 void RatingManager::displaybyMovie(int id, const std::string& title, const UserManager& userMgr) const {
     
     std::vector<Rating> filteredRatings;
@@ -37,6 +88,10 @@ void RatingManager::displaybyMovie(int id, const std::string& title, const UserM
 
         std::cout << "평가한 사용자: " << name << ", 평점: " << r.getScore() << std::endl;
     }
+}
+
+void RatingManager:: sortbyScore() {
+    std::sort(ratings.begin(), ratings.end());
 }
 
 // 이미 해당 유저-영화 조합의 평점이 존재하면 true, 아니면 false 반환
