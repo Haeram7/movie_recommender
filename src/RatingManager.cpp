@@ -29,7 +29,9 @@ void RatingManager::loadFromFile(const std::string& filename) {
     std::string line;
     getline(file, line); // 헤더 스킵
     while(getline(file, line)) {
-        if (line.empty()) continue; // 빈 줄 방어
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back(); // \r 제거하여 오류 방지
+        }
         std::stringstream ss(line);
         std::string token;
         int userID, movieID;

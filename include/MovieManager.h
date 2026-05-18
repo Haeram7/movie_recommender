@@ -19,6 +19,8 @@ public:
     void removeMovie(const std::string &title);
     void sortbyRating();
     std::vector<Movie> findbyTitle(const std::string& title) const;
+    std::vector<Movie> getAllMovies() const;
     Movie* findExactTitle(const std::string &title);
     Movie* findbyId(int id);
+    void resetAllMovieRatings(); // 모든 영화의 평점 초기화 메서드 추가
 };

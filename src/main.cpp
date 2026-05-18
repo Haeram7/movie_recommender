@@ -4,6 +4,8 @@
 #include "RatingManager.h"
 #include "MovieManager.h"
 #include "UserManager.h"
+#include "Recommender.h"
+#include <iostream>
 
 // 1. 영화 추가
 void handleAddMovie(MovieManager& movieMgr) {
@@ -135,10 +137,32 @@ void handleDisplayRatingsByMovie(RatingManager& ratingMgr, MovieManager& movieMg
     Movie* movie = movieMgr.findExactTitle(movieTitle); 
 
     if (movie != nullptr) {
-
         ratingMgr.displaybyMovie(movie->getID(), movie->getTitle(), userMgr);
     } else {
         std::cout << "일치하는 영화가 목록에 없습니다." << std::endl;
+    }
+}
+// 10. 영화 추천
+void handleRecommendation(Recommender& recommender) {
+    std:: string userName;
+    std::cout << "추천을 받을 사용자 이름: ";
+    std::getline(std::cin, userName);
+
+    User* user = recommender.getUserManager().findbyName(userName);
+    if (user == nullptr) {
+        std::cout << "일치하는 사용자가 목록에 없습니다." << std::endl;
+        return; // 일치하는 사용자가 없으면 종료
+    }
+    std::cout << "사용자들의 평가를 분석 중... "<< std::endl;
+    std::vector<Movie*> recommendations = recommender.recommendMovies(user->getID(), 4); // 상위 4명과 유사한 사용자들의 평점을 분석하여 최대 6개의 영화 추천
+    if(recommendations.empty()) {
+        std::cout << "평가 데이터가 없거나 추천할 영화가 없습니다." << std::endl;
+    } 
+    else {
+        std::cout << "====== 추천 영화 목록 ======\n";
+        for (const auto& m : recommendations) {
+            std::cout << *m << std::endl;
+        }
     }
 }
 
@@ -146,24 +170,47 @@ int main() {
     MovieManager movieMgr;
     UserManager userMgr;
     RatingManager ratingMgr;
+    Recommender recommender(movieMgr, ratingMgr, userMgr);
     int choice = -1;
+
     // 프로그램 시작 시 파일에서 데이터 로드
+    std::cout << "데이터를 불러오는 중..." << std::endl;
     movieMgr.loadFromFile("data/movies.csv");
     userMgr.loadFromFile("data/users.csv");
     ratingMgr.loadFromFile("data/ratings.csv");
+    std::cout << "데이터 로드 완료!" << std::endl;
+
+    // csv 파일에서 영화와 평점 데이터를 불러온 후 각 영화 객체의 평점을 초기화(중복 방지)
+    // 평점 데이터를 기반으로 영화의 총 평점과 평가 수를 업데이트
+    movieMgr.resetAllMovieRatings();
+    for (const auto& rating : ratingMgr.getAllRatings()) {
+        Movie* movie = movieMgr.findbyId(rating.getMovieID());
+        if (movie != nullptr) {
+            movie->addRating(rating.getScore());
+        }
+    }
 
     while(true) {
-    
         std::cout << "==== Movie Recommender System ==== \n\n" 
                 << "[ 영화 ]\n" <<  " 1. 영화 추가 \n" << " 2. 영화 제거 \n" << " 3. 제목으로 검색 \n" 
                 << " 4. 전체 목록 출력 \n" << " 5. 평점순 정렬 출력 \n\n"
                 << "[ 사용자 ]\n" << " 6. 사용자 추가 \n" << " 7. 사용자 목록 출력 \n\n"
-                << "[ 평점 ] \n" << " 8. 평점 입력 \n" << " 9. 영화별 평점 보기 \n\n" 
+                << "[ 평점 ] \n" << " 8. 평점 입력 \n" << " 9. 영화별 평점 보기 \n\n"
+                << "[ 추천 ] \n" << " 10. 영화 추천 \n\n"  
                 << " 0. 종료 \n\n" << " 선택 > "; 
         std::cin >> choice;
-        std::cin.ignore(100, '\n'); // 버퍼 제거
+
+        if (std::cin.fail()) { // 숫자가 아닌 입력이 들어왔을 때 예외처리
+            std::cin.clear();            // 버퍼 제거
+            std::cin.ignore(100, '\n');  // 입력 버퍼에 남아있는 쓰레기 문자들('a' 등)을 지움
+            std::cout << "\n 잘못된 입력입니다! 0에서 10 사이의 숫자만 입력해주세요.\n" << std::endl;
+            
+            continue; 
+        }
+        std::cin.ignore(100, '\n'); // 버퍼의 개행 문자 제거
+
         if(choice == 0) {
-            std::cout << "프로그램을 종료합니다." << std::endl;
+            std::cout << "데이터 저장 후 프로그램을 종료합니다." << std::endl;
             break;
         }
         switch(choice) {
@@ -176,6 +223,7 @@ int main() {
             case 7: handlePrintUsers(userMgr); break;
             case 8: handleAddRating(ratingMgr, userMgr, movieMgr); break;
             case 9: handleDisplayRatingsByMovie(ratingMgr, movieMgr, userMgr); break;
+            case 10: handleRecommendation(recommender); break;
             default: std::cout << "잘못된 선택입니다. 다시 시도해주세요." << std::endl; break;
         }
         // 기능을 수행한 후 메뉴로 돌아가기 전

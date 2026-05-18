@@ -29,7 +29,9 @@ void MovieManager::loadFromFile(const std::string& filename) {
     std::string line;
     getline(file, line); // 헤더 스킵
     while(getline(file, line)) {
-        if(line.empty()) continue;
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back(); // \r 제거하여 오류 방지
+        }
         std::stringstream ss(line);
         std::string token;
         try {
@@ -106,6 +108,10 @@ std::vector<Movie> MovieManager::findbyTitle(const std::string &title) const{
     return results;
 }
 
+std::vector<Movie> MovieManager::getAllMovies() const {
+    return movies; // 영화 목록 전체 반환
+}
+
 Movie* MovieManager::findExactTitle(const std::string &title) {
     for (auto &m : movies) { 
         if (m.getTitle() == title) {
@@ -116,11 +122,17 @@ Movie* MovieManager::findExactTitle(const std::string &title) {
 }
 
 Movie* MovieManager::findbyId(int id) {
-    for (const auto &m : movies) {
+    for (auto &m : movies) {
         if (m.getID() == id) {
-            return &m; // const Movie*를 Movie*로 변환하여 반환
+            return &m;
         }
     }
     return nullptr; // 일치하는 영화가 없는 경우 nullptr 반환
+}
+
+void MovieManager::resetAllMovieRatings() {
+    for (auto& m : movies) {
+        m.resetRatings(); 
+    }
 }
 

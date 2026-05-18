@@ -74,7 +74,10 @@ void Movie::display() const {
 void Movie::setNextID(int num) {
     nextID = num;
 }
-
+void Movie::resetRatings() {
+    this->totalRating = 0.0;
+    this->ratingCount = 0;
+}
 bool Movie::operator <(const Movie& other) const {
     if(this->getAverageRating() != other.getAverageRating()) {
         return this->getAverageRating() < other.getAverageRating();
