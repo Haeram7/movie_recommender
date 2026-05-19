@@ -1,5 +1,5 @@
 #include "Recommender.h"
-#include <cstdlib>
+#include <cmath> // abs()를 double에 사용하기 위해 변경
 #include <algorithm>
 #include <map>
 #include <set>
@@ -11,8 +11,10 @@ double Recommender::similaritycalculation(int user1, int user2) const {
     int commonCount = 0;
     double diffSum = 0.0;
 
-    for(const auto& rating1 : ratingMgr.getUserRatings(user1)) {
-        for(const auto& rating2 : ratingMgr.getUserRatings(user2)) {
+    std::vector<Rating> ratings1 = ratingMgr.getUserRatings(user1);
+    std::vector<Rating> ratings2 = ratingMgr.getUserRatings(user2);
+    for(const auto& rating1 : ratings1) {
+        for(const auto& rating2 : ratings2) {
             if(rating1.getMovieID() == rating2.getMovieID()) {
                 commonCount++;
                 diffSum += std::abs(rating1.getScore() - rating2.getScore());
