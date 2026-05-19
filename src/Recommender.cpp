@@ -51,10 +51,11 @@ std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int t
     return a.second > b.second; // 유사도 내림차순 정렬
     });
 
-    int k = 0;
-    if(similarities.size() > topK) {
-        similarities.resize(topK); // 상위 K명으로 벡터 크기 조절
-        k = topK;
+    size_t unsignedTopK = static_cast<size_t>(topK); // 경고 방지 위해 size_t로 변환
+    size_t k = 0; // 실제 유사한 사용자 수가 topK보다 적을 수 있으므로 조정 필요 
+    if(similarities.size() > unsignedTopK) {
+        similarities.resize(unsignedTopK); // 상위 K명으로 벡터 크기 조절
+        k = unsignedTopK;
     }
     else {
         k = similarities.size(); // 실제 유사한 사용자 수로 K 조정
@@ -66,7 +67,7 @@ std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int t
     }
 
     std::map<int, std::pair<double, double>> movieScores; // 영화 ID와 <유사도 가중치 합, 추천 횟수> 매핑
-    for(int i = 0; i<k;i++) {
+    for(size_t i = 0; i<k;i++) {
         int uID = similarities[i].first;
         double sim = similarities[i].second;
         for(const auto& r : ratingMgr.getUserRatings(uID)) {
@@ -88,11 +89,14 @@ std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int t
     std::sort(scoredMovies.begin(), scoredMovies.end(), [](const auto& a, const auto& b) {
     return a.second > b.second; // 최종 점수 내림차순 정렬
     });
+
     std::vector<Movie*> recommendations;
-    if(scoredMovies.size() < topN) {
-        topN = scoredMovies.size(); // 실제 추천할 영화 수로 N 조정
+    size_t unsignedTopN = static_cast<size_t>(topN); // 경고 방지 위해 size_t로 변환
+
+    if(scoredMovies.size() < unsignedTopN) {
+        unsignedTopN = scoredMovies.size(); // 실제 추천할 영화 수로 N 조정
     }
-    for(int i = 0; i<topN && i<scoredMovies.size(); i++) {
+    for(size_t i = 0; i<unsignedTopN && i<scoredMovies.size(); i++) {
         recommendations.push_back(movieMgr.findbyId(scoredMovies[i].first));
     } //
     return recommendations;

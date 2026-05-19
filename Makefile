@@ -12,6 +12,7 @@ OBJ_DIR = obj
 TARGET = movie_app
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
+HEADERS = $(wildcard $(INC_DIR)/*.h)
 
 # 4. 기본 빌드 타겟
 all: $(TARGET)
@@ -22,7 +23,7 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # 6. 객체 파일 컴파일 규칙
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADERS)
 	@mkdir -p $(OBJ_DIR)
 	@echo "컴파일 중: $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@

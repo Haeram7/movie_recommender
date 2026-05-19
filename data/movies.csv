@@ -1,26 +1,26 @@
 title,genre,year,totalrating,count
-Whiplash,Drama,2014,0,0
-Inception,Sci-Fi,2010,59,8
+Whiplash,Drama,2014,59,8
+Inception,Sci-Fi,2010,42,5
 Interstellar,Sci-Fi,2014,30.5,4
 Avatar,Sci-Fi,2009,16,2
-Gladiator,Action,2000,24.5,3
-Toy Story,Animation,1995,16.5,2
-Joker,Drama,2019,25,3
-Parasite,Drama,2019,42,5
-The Dark Knight,Action,2008,42,5
+Gladiator,Action,2000,26.5,3
+Toy Story,Animation,1995,35,4
+Joker,Drama,2019,34.5,4
+Parasite,Drama,2019,24.5,3
+The Dark Knight,Action,2008,35,4
 The Matrix,Sci-Fi,1999,34.5,4
-Your Name,Animation,2016,34.5,4
-Coco,Animation,2017,26,3
-Iron Man,Action,2008,26,3
-Fight Club,Drama,1999,17.5,2
-Forrest Gump,Drama,1994,17.5,2
-La La Land,Romance,2016,35,4
-Spirited Away,Animation,2001,35,4
-The Avengers,Action,2012,17.5,2
-Titanic,Romance,1997,26.5,3
-About Time,Romance,2013,27,3
-Leon,Crime,1994,9,1
-The Lord of the Rings,Fantasy,2001,9,1
-The Shawshank Redemption,Drama,1994,18.5,2
-The Godfather,Crime,1972,28,3
-Pulp Fiction,Crime,1994,9.5,1
+Your Name,Animation,2016,42,5
+Coco,Animation,2017,25,3
+Iron Man,Action,2008,0,0
+Fight Club,Drama,1999,27,3
+Forrest Gump,Drama,1994,26,3
+La La Land,Romance,2016,17.5,2
+Spirited Away,Animation,2001,16.5,2
+The Avengers,Action,2012,26,3
+Titanic,Romance,1997,18.5,2
+About Time,Romance,2013,17.5,2
+Leon,Crime,1994,17.5,2
+The Lord of the Rings,Fantasy,2001,9.5,1
+The Shawshank Redemption,Drama,1994,28,3
+The Godfather,Crime,1972,9,1
+Pulp Fiction,Crime,1994,9,1

@@ -1,9 +1,25 @@
-Basic and simple program for recommendation of movies
+사용자 입력 데이터 기반의 간단한 영화 추천 프로그램
 
-Key features
-1. Movie
-2. Rating
-3. User
+주요 클래스
+1. 영화
+2. 평가
+3. 사용자
 
-How to build and run
+실행 방법
 - make run
+
+==== 사용자 메뉴 ====
+[영화]
+1. 영화 추가
+2. 영화 제거
+3. 제목으로 검색
+4. 전체 목록 출력
+5. 평점순 출력
+[사용자]
+6. 사용자 추가
+7. 사용자 목록 출력
+[평점]
+8. 평점 입력
+9. 영화별 평점 보기
+[추천]
+10. 추천

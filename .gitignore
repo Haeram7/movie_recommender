@@ -1,12 +1,14 @@
 # 컴파일 결과물 및 실행 파일
 movie_app
 *.out
-*.o
+*.a
+obj/
 *.dSYM
 
-# 에디터 및 임시 파일
+# 에디터 및 OS 파일
 *~
 *.swp
 .vscode/
 .idea/
 .DS_Store
+Thumbs.db

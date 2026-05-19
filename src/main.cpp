@@ -224,7 +224,7 @@ int main() {
             case 8: handleAddRating(ratingMgr, userMgr, movieMgr); break;
             case 9: handleDisplayRatingsByMovie(ratingMgr, movieMgr, userMgr); break;
             case 10: handleRecommendation(recommender); break;
-            default: std::cout << "잘못된 선택입니다. 다시 시도해주세요." << std::endl; break;
+            default: std::cout << "잘못된 선택입니다. 다시 시도해주세요." << std::endl; continue; // 잘못된 입력은 메뉴로 돌아가기
         }
         // 기능을 수행한 후 메뉴로 돌아가기 전
     std::cout << "\n작업 완료. [엔터를 누르시면 메뉴로 돌아갑니다]";
