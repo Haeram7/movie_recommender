@@ -26,7 +26,6 @@ public:
     int         getRatingCount()     const;
     void setReleaseYear(int year);  
     void addRating(double r);               
-    void display()               const;
     static void setNextID(int num);
     void resetRatings(); // 평점 초기화 메서드 추가
 
@@ -34,7 +33,9 @@ public:
     bool operator >(const Movie& other) const;
     bool operator ==(const Movie& other) const;
     bool operator !=(const Movie& other) const;
+    /*
     bool operator <=(const Movie& other) const;
     bool operator >=(const Movie& other) const;
+    */
     friend std::ostream& operator<<(std::ostream& os, const Movie& m);
     };

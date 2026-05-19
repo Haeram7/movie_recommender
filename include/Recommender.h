@@ -11,7 +11,6 @@ class Recommender {
         UserManager& userMgr;
     public:
         Recommender(MovieManager& m, RatingManager& r, UserManager& u);
-        UserManager& getUserManager() const;
         double similaritycalculation(int user1, int user2) const;
-        std::vector<Movie*> recommendMovies(int targetUser, int topK, int topN = 6);
+        std::vector<Movie*> recommendMovies(int targetUser, int topK, int topN = 6); // 6개 추천
 };

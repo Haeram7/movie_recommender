@@ -7,8 +7,6 @@
 
 Recommender::Recommender(MovieManager& m, RatingManager& r, UserManager& u) : movieMgr(m), ratingMgr(r), userMgr(u) {}
 
-UserManager& Recommender::getUserManager() const { return userMgr; } 
-
 double Recommender::similaritycalculation(int user1, int user2) const {
     int commonCount = 0;
     double diffSum = 0.0;
@@ -25,7 +23,7 @@ double Recommender::similaritycalculation(int user1, int user2) const {
     if(commonCount == 0) {
         return -1.0; // 엣지 케이스 (공통 평가가 없는 경우)
     }
-    return 10 * commonCount - diffSum; // 유사도 계산 (값이 클수록 유사)
+    return 10 * commonCount - diffSum; // 유사도 계산 (값이 클수록 유사, 10 * 공통 - 점수 차이)
 }
 
 std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int topN) {
@@ -43,7 +41,7 @@ std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int t
     std::vector<std::pair<int, double>> similarities; // 사용자ID, 유사도 매핑
     for(int other : otherUserID) {
         double sim = similaritycalculation(targetUser, other);
-        if(sim >= 0) {
+        if(sim >= 0) { // 엣지 케이스 고려
             similarities.emplace_back(other, sim);
         }   
     }
@@ -72,11 +70,11 @@ std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int t
         double sim = similarities[i].second;
         for(const auto& r : ratingMgr.getUserRatings(uID)) {
             if(watchedMovies.find(r.getMovieID()) != watchedMovies.end()) {
-            continue; // 이미 평가한 영화는 건너뜀
-        }
-        if(r.getScore() >= 7.0) { // 긍정적 평가만 반영(유사도 가중치로 계산하기 위해 / 부정적 평가가 추천되는 경우 방지)
-            movieScores[r.getMovieID()].first += sim * r.getScore(); // 유사도 가중치 합산
-            movieScores[r.getMovieID()].second += 1; // 추천 횟수 카운트
+                continue; // 이미 평가한 영화는 건너뜀
+            }
+            if(r.getScore() >= 7.0) { // 긍정적 평가만 반영(유사도 가중치로 계산하기 위해 / 부정적 평가가 추천되는 경우 방지)
+                movieScores[r.getMovieID()].first += sim * r.getScore(); // 유사도 가중치 합산
+                movieScores[r.getMovieID()].second += 1; // 추천 횟수 카운트
             }
         }
     }
@@ -97,7 +95,10 @@ std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int t
         unsignedTopN = scoredMovies.size(); // 실제 추천할 영화 수로 N 조정
     }
     for(size_t i = 0; i<unsignedTopN && i<scoredMovies.size(); i++) {
-        recommendations.push_back(movieMgr.findbyId(scoredMovies[i].first));
-    } //
+        Movie* movie = movieMgr.findbyId(scoredMovies[i].first); // 영화 ID로 영화 객체 찾아서 추천 목록에 추가
+        if(movie != nullptr) {
+            recommendations.push_back(movie); 
+        } // 존재하지 않는 영화에 대한 평가가 있을 수 있으므로 nullptr 체크(엣지 케이스)
+    }
     return recommendations;
 }

@@ -14,8 +14,5 @@ class User {
         int getID() const;
         std::string getName() const;
         std::string getEmail() const;
-        void display() const; 
-        bool operator <(const User& other) const;
-        bool operator >(const User& other) const;
         friend std::ostream& operator<<(std::ostream& os, const User& u);
 };

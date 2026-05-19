@@ -35,10 +35,10 @@ void MovieManager::loadFromFile(const std::string& filename) {
         std::stringstream ss(line);
         std::string token;
         try {
-            getline(ss, token, ','); std::string title = token;
-            getline(ss, token, ','); std::string genre = token;
-            getline(ss, token, ','); int year = stoi(token);
-            getline(ss, token, ','); double total = stod(token);
+            getline(ss, token, '|'); std::string title = token;
+            getline(ss, token, '|'); std::string genre = token;
+            getline(ss, token, '|'); int year = stoi(token);
+            getline(ss, token, '|'); double total = stod(token);
             getline(ss, token); int count = stoi(token);
             movies.emplace_back(title, genre, year, total, count);
         } catch(...) {
@@ -55,9 +55,9 @@ void MovieManager::saveToFile(const std::string& filename) const {
         std::cerr << "파일을 열 수 없습니다: " << filename << std::endl;
         return;
     }
-    file << "title,genre,year,totalrating,count" << std::endl;
+    file << "title|genre|year|totalrating|count" << std::endl;
     for(const auto &m : movies) {
-        file << m.getTitle() << "," << m.getGenre() << "," << m.getReleaseYear() << "," << m.getAverageRating() * m.getRatingCount() << "," << m.getRatingCount() << std::endl;
+        file << m.getTitle() << "|" << m.getGenre() << "|" << m.getReleaseYear() << "|" << m.getAverageRating() * m.getRatingCount() << "|" << m.getRatingCount() << std::endl;
     }
     file.close();
 }
@@ -73,7 +73,7 @@ void MovieManager::addMovie(const Movie& m) {
     std::cout << "영화가 추가되었습니다: " << m.getTitle() << std::endl;
 }
 
-
+/* 영화 제거 기능 삭제
 void MovieManager::removeMovie(const std::string& title) {
     // 제목이 일치하는 객체 찾기
     auto it = std::find_if(movies.begin(), movies.end(), 
@@ -90,7 +90,7 @@ void MovieManager::removeMovie(const std::string& title) {
     }
 }
 
-
+*/
 
 
 void MovieManager::sortbyRating() {
@@ -108,7 +108,7 @@ std::vector<Movie> MovieManager::findbyTitle(const std::string &title) const{
     return results;
 }
 
-std::vector<Movie> MovieManager::getAllMovies() const {
+const std::vector<Movie>& MovieManager::getAllMovies() const {
     return movies; // 영화 목록 전체 반환
 }
 

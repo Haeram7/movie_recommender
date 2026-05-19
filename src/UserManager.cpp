@@ -35,7 +35,7 @@ void UserManager::loadFromFile(const std::string& filename)  {
     getline(file, line); // 헤더 스킵
     while(getline(file, line)) {
         if (!line.empty() && line.back() == '\r') {
-            line.pop_back(); // \r 제거하여 오류 방지
+            line.pop_back(); // \r 제거하여 오류 방지, 외부에서 복사한 데이터를 사용할 때 발생할 수 있는 문제 해결
         }
         std::stringstream ss(line);
         std::string token;
@@ -43,8 +43,8 @@ void UserManager::loadFromFile(const std::string& filename)  {
         std::string name, email;
 
         try {
-            getline(ss, token, ','); id = stoi(token);
-            getline(ss, token, ','); name = token;
+            getline(ss, token, '|'); id = stoi(token);
+            getline(ss, token, '|'); name = token;
             getline(ss, token); email = token;
             users.emplace_back(id, name, email);
         }
@@ -61,9 +61,9 @@ void UserManager::saveToFile(const std::string& filename) const {
         std::cerr << "파일을 열 수 없습니다: " << filename << std::endl;
         return;
     }
-    file << "id,name,email" << std::endl;
+    file << "id|name|email" << std::endl;
     for(const auto &u : users) {
-        file << u.getID() << "," << u.getName() << "," << u.getEmail() << std::endl;
+        file << u.getID() << "|" << u.getName() << "|" << u.getEmail() << std::endl;
     }
     file.close();
 }
@@ -86,17 +86,11 @@ User* UserManager::findbyName(const std::string &name) {
     }
     return nullptr; // 일치하는 사용자가 없는 경우 nullptr 반환
 }
-void UserManager::sortbyName() {
-    std::sort(users.begin(), users.end());
-    // User 클래스의 operator < 연산자 오버로딩을 이용하여 이름 기준 오름차순 정렬
-}
-
-
 
 const User* UserManager::findbyId(int id) const {
     for (const auto &u : users) {
         if (u.getID() == id) {
-            return &u; // const User* 타입을 반환하게 됩니다.
+            return &u; 
         }
     }
     return nullptr;

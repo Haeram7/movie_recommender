@@ -38,8 +38,8 @@ void RatingManager::loadFromFile(const std::string& filename) {
         double score;
 
         try {
-            getline(ss, token, ','); userID = stoi(token);
-            getline(ss, token, ','); movieID = stoi(token);
+            getline(ss, token, '|'); userID = stoi(token);
+            getline(ss, token, '|'); movieID = stoi(token);
             getline(ss, token); score = stod(token);
             ratings.emplace_back(userID, movieID, score);
         }
@@ -55,9 +55,9 @@ void RatingManager::saveToFile(const std::string& filename) const {
         std::cerr << "파일을 열 수 없습니다: " << filename << std::endl;
         return;
     }
-    file << "userID,movieID,score" << std::endl;
+    file << "userID|movieID|score" << std::endl;
     for(const auto &r : ratings) {
-        file << r.getUserID() << "," << r.getMovieID() << "," << r.getScore() << std::endl;
+        file << r.getUserID() << "|" << r.getMovieID() << "|" << r.getScore() << std::endl;
     }
     file.close();
 }
@@ -97,6 +97,15 @@ void RatingManager::displaybyMovie(int id, const std::string& title, const UserM
 
 void RatingManager:: sortbyScore() {
     std::sort(ratings.begin(), ratings.end());
+}
+
+void RatingManager::sortbyID() {
+    std::sort(ratings.begin(), ratings.end(), [](const Rating& a, const Rating& b) {
+        if (a.getUserID() == b.getUserID()) {
+            return a.getMovieID() < b.getMovieID(); // userID가 같으면 movieID로 정렬
+        }
+        return a.getUserID() < b.getUserID(); // userID로 정렬
+    });
 }
 
 // 이미 해당 유저-영화 조합의 평점이 존재하면 true, 아니면 false 반환

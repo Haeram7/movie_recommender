@@ -19,6 +19,7 @@ class RatingManager : public BaseManager {
         void addRating(const Rating& r);
         void displaybyMovie(int id, const std::string& title, const UserManager& userMgr) const;
         void sortbyScore();
+        void sortbyID();
         bool hasAlreadyRated(int userId, int movieId) const;
        
         std::vector<Rating> getUserRatings(int userID) const;

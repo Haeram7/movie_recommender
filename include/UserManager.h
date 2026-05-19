@@ -17,7 +17,6 @@ class UserManager : public BaseManager {
 
         void addUser(const User &u);
         User* findbyName(const std::string &name);
-        void sortbyName();
         
         const User* findbyId(int id) const;
         
