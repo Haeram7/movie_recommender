@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <iostream>
+#include "Timer.h"
 
 Recommender::Recommender(MovieManager& m, RatingManager& r, UserManager& u) : movieMgr(m), ratingMgr(r), userMgr(u) {}
 
@@ -29,6 +30,7 @@ double Recommender::similaritycalculation(int user1, int user2) const {
 }
 
 std::vector<Movie*> Recommender::recommendMovies(int targetUser, int topK, int topN) {
+    Timer t("Recommender::recommendMovies");
     std::vector<Rating> target = ratingMgr.getUserRatings(targetUser);
     if(target.empty()) {
         return {};

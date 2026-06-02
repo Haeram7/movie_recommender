@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "Timer.h"
 
 MovieManager::MovieManager() {}
 
@@ -21,6 +22,7 @@ int MovieManager::size() const {
 }
 
 void MovieManager::loadFromFile(const std::string& filename) {
+    Timer t("MovieManager::loadFromFile");
     std::ifstream file(filename);
     if(!file.is_open()) {
         std::cerr << "파일을 열 수 없습니다: " << filename << std::endl;
