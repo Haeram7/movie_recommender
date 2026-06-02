@@ -4,10 +4,11 @@
 #include "Rating.h"
 #include <vector>
 #include "UserManager.h"
+#include <memory>
 
 class RatingManager : public BaseManager {
     private:
-        std::vector<Rating> ratings;
+        std::vector<std::unique_ptr<Rating>> ratings;
     public:
         RatingManager();
         void printAll() const override;
@@ -22,7 +23,7 @@ class RatingManager : public BaseManager {
         void sortbyID();
         bool hasAlreadyRated(int userId, int movieId) const;
        
-        std::vector<Rating> getUserRatings(int userID) const;
-        std::vector<Rating> getAllRatings() const;
+        std::vector<const Rating*> getUserRatings(int userID) const;
+        const std::vector<std::unique_ptr<Rating>>& getAllRatings() const;
         
 };

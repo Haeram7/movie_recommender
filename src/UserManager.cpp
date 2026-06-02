@@ -12,7 +12,7 @@ void UserManager::printAll() const {
         return; // 출력 후 바로 함수 종료
     }
     for (const auto &u : users){
-        std::cout << u << std::endl; // User 클래스의 operator << 오버로딩을 이용하여 사용자 정보 출력
+        std::cout << *u << std::endl; // User 클래스의 operator << 오버로딩을 이용하여 사용자 정보 출력
  }
 }
 
@@ -46,7 +46,7 @@ void UserManager::loadFromFile(const std::string& filename)  {
             getline(ss, token, '|'); id = stoi(token);
             getline(ss, token, '|'); name = token;
             getline(ss, token); email = token;
-            users.emplace_back(id, name, email);
+            users.push_back(std::make_unique<User>(id, name, email));
         }
         catch(...) {
             continue; // 형식 오류는 건너뜀
@@ -63,25 +63,25 @@ void UserManager::saveToFile(const std::string& filename) const {
     }
     file << "id|name|email" << std::endl;
     for(const auto &u : users) {
-        file << u.getID() << "|" << u.getName() << "|" << u.getEmail() << std::endl;
+        file << u->getID() << "|" << u->getName() << "|" << u->getEmail() << std::endl;
     }
     file.close();
 }
 
 void UserManager::addUser(const User &u) {
     for(const auto &user : users) {
-        if(u.getName() == user.getName()) {
-            std::cout << "같은 사용자가 이미 존재합니다 : " << user.getName() << std::endl;
+        if(u.getName() == user->getName()) {
+            std::cout << "같은 사용자가 이미 존재합니다 : " << user->getName() << std::endl;
             return; // 중복된 사용자 이름은 추가하지 않음
         }
     }
-    users.push_back(u);
+    users.push_back(std::make_unique<User>(u));
 }
 
 User* UserManager::findbyName(const std::string &name) {
     for(auto &u : users){
-        if(u.getName() == name){
-            return &u; // 일치하는 사용자가 있으면 해당 사용자 객체의 포인터를 반환
+        if(u->getName() == name){
+            return u.get(); // 일치하는 사용자가 있으면 해당 사용자 객체의 포인터를 반환
         }
     }
     return nullptr; // 일치하는 사용자가 없는 경우 nullptr 반환
@@ -89,8 +89,8 @@ User* UserManager::findbyName(const std::string &name) {
 
 const User* UserManager::findbyId(int id) const {
     for (const auto &u : users) {
-        if (u.getID() == id) {
-            return &u; 
+        if (u->getID() == id) {
+            return u.get();
         }
     }
     return nullptr;

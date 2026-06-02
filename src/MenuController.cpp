@@ -18,7 +18,7 @@ void MenuController::handleAddMovie() {
     std::cin.ignore(100, '\n'); // 버퍼 정리
 
     Movie newMovie(title, genre, year);
-    movieMgr.addMovie(newMovie);
+    movieMgr.addMovie(newMovie); 
 }
 
 // 2. 제목으로 검색
@@ -37,7 +37,7 @@ void MenuController::handleSearchMovie() {
     } else {
         std::cout << "검색 결과:\n";
         for (const auto& m : results) {
-            std::cout << m << std::endl;
+            std::cout << *m << std::endl;
         }
     }
 }
@@ -91,17 +91,19 @@ void MenuController::handleDisplayRatingsByUser() {
     std::getline(std::cin, userName);
     User* user = userMgr.findbyName(userName);
     if (user != nullptr) {
-        std::vector<Rating> userRatings = ratingMgr.getUserRatings(user->getID());
+        std::vector<const Rating*> userRatings = ratingMgr.getUserRatings(user->getID());
         if (userRatings.empty()) {
             std::cout << "해당 사용자가 평가한 영화가 없습니다." << std::endl;
             return;
         }
-        std::sort(userRatings.begin(), userRatings.end()); // 점수순 정렬 후 출력
+        std::sort(userRatings.begin(), userRatings.end(), [](const Rating* a, const Rating* b) {
+            return a->getScore() > b->getScore();
+        }); // 점수순 정렬 후 출력
         std::cout << "=== 사용자 [" << user->getName() << "]의 평점 목록 ===" << std::endl;
         for (const auto& r : userRatings) {
-            Movie* movie = movieMgr.findbyId(r.getMovieID());
+            Movie* movie = movieMgr.findbyId(r->getMovieID());
             std::string title = (movie != nullptr) ? movie->getTitle() : "알 수 없는 영화";
-            std::cout << "영화 제목: " << title << ", 평점: " << r.getScore() << std::endl;
+            std::cout << "영화 제목: " << title << ", 평점: " << r->getScore() << std::endl;
         }
     } else {
         std::cout << "일치하는 사용자가 목록에 없습니다." << std::endl;

@@ -1,7 +1,7 @@
 # 1. 컴파일러 및 컴파일 옵션 설정
 CXX = g++
 # -g (디버깅), include 폴더 경로 추가
-CXXFLAGS = -std=c++17 -Wall -Wextra -g -I$(INC_DIR)
+CXXFLAGS = -std=c++17 -Wall -Wextra -g -I$(INC_DIR) -O2
 
 # 2. 디렉토리 설정
 SRC_DIR = src

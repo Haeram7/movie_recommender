@@ -2,10 +2,11 @@
 #include "User.h"
 #include "BaseManager.h"
 #include <vector>
+#include <memory>
 
 class UserManager : public BaseManager {
     private:
-        std::vector<User> users;
+        std::vector<std::unique_ptr<User>> users;
     public:
         UserManager();
         

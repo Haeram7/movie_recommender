@@ -2,10 +2,11 @@
 #include "Movie.h"
 #include "BaseManager.h"
 #include <vector>
+#include <memory>
 
 class MovieManager : public BaseManager{
 private: 
-    std::vector<Movie> movies;
+    std::vector<std::unique_ptr<Movie>> movies;
 public:
     MovieManager();
 
@@ -17,8 +18,8 @@ public:
 
     void addMovie(const Movie& m);
     void sortbyRating();
-    std::vector<Movie> findbyTitle(const std::string& title) const;
-    const std::vector<Movie>& getAllMovies() const;
+    std::vector<Movie*> findbyTitle(const std::string& title) const;
+    const std::vector<std::unique_ptr<Movie>>& getAllMovies() const;
     Movie* findExactTitle(const std::string &title);
     Movie* findbyId(int id);
     void resetAllMovieRatings(); // 모든 영화의 평점 초기화 메서드 추가

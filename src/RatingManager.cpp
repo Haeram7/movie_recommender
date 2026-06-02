@@ -8,7 +8,7 @@ RatingManager:: RatingManager() {}
 
 void RatingManager::printAll() const {
     for(const auto &r : ratings) {
-        r.display();
+        r->display();
     }
 }
 
@@ -41,7 +41,7 @@ void RatingManager::loadFromFile(const std::string& filename) {
             getline(ss, token, '|'); userID = stoi(token);
             getline(ss, token, '|'); movieID = stoi(token);
             getline(ss, token); score = stod(token);
-            ratings.emplace_back(userID, movieID, score);
+            ratings.push_back(std::make_unique<Rating>(userID, movieID, score));
         }
         catch(...) {
             continue; // 형식 오류는 건너뜀
@@ -57,22 +57,22 @@ void RatingManager::saveToFile(const std::string& filename) const {
     }
     file << "userID|movieID|score" << std::endl;
     for(const auto &r : ratings) {
-        file << r.getUserID() << "|" << r.getMovieID() << "|" << r.getScore() << std::endl;
+        file << r->getUserID() << "|" << r->getMovieID() << "|" << r->getScore() << std::endl;
     }
     file.close();
 }
 
 void RatingManager::addRating(const Rating& r) {
-    ratings.push_back(r);
+    ratings.push_back(std::make_unique<Rating>(r));
 }
 
 void RatingManager::displaybyMovie(int id, const std::string& title, const UserManager& userMgr) const {
     
-    std::vector<Rating> filteredRatings;
+    std::vector<const Rating*> filteredRatings;
 
     for(const auto &r : ratings) {
-        if(r.getMovieID() == id) {
-            filteredRatings.push_back(r);
+        if(r->getMovieID() == id) {
+            filteredRatings.push_back(r.get());
         }
     }
 
@@ -82,52 +82,55 @@ void RatingManager::displaybyMovie(int id, const std::string& title, const UserM
         return;
     }
 
-    // 점수순 정렬 (Rating::operator< 사용)
-    std::sort(filteredRatings.begin(), filteredRatings.end());
+    std::sort(filteredRatings.begin(), filteredRatings.end(), [](const Rating* a, const Rating* b) {
+    return *b < *a; 
+});
 
     // 제목 및 상세 평점 목록 출력
     std::cout << "=== 영화 [" << title << "] 평점 목록 ===" << std::endl;
     for(const auto &r : filteredRatings) {
-        const User* user = userMgr.findbyId(r.getUserID());
+        const User* user = userMgr.findbyId(r->getUserID());
         std::string name = (user != nullptr) ? user->getName() : "알 수 없는 사용자";
 
-        std::cout << "평가한 사용자: " << name << ", 평점: " << r.getScore() << std::endl;
+        std::cout << "평가한 사용자: " << name << ", 평점: " << r->getScore() << std::endl;
     }
 }
 
 void RatingManager:: sortbyScore() {
-    std::sort(ratings.begin(), ratings.end());
+    std::sort(ratings.begin(), ratings.end(), [](const std::unique_ptr<Rating>& a, const std::unique_ptr<Rating>& b) {
+        return *b < *a; 
+    });
 }
 
 void RatingManager::sortbyID() {
-    std::sort(ratings.begin(), ratings.end(), [](const Rating& a, const Rating& b) {
-        if (a.getUserID() == b.getUserID()) {
-            return a.getMovieID() < b.getMovieID(); // userID가 같으면 movieID로 정렬
+    std::sort(ratings.begin(), ratings.end(), [](const std::unique_ptr<Rating>& a, const std::unique_ptr<Rating>& b) {
+        if (a->getUserID() == b->getUserID()) {
+            return a->getMovieID() < b->getMovieID(); // userID가 같으면 movieID로 정렬
         }
-        return a.getUserID() < b.getUserID(); // userID로 정렬
+        return a->getUserID() < b->getUserID(); // userID로 정렬
     });
 }
 
 // 이미 해당 유저-영화 조합의 평점이 존재하면 true, 아니면 false 반환
 bool RatingManager::hasAlreadyRated(int userId, int movieId) const {
     for (const auto& r : ratings) {
-        if (r.getUserID() == userId && r.getMovieID() == movieId) {
+        if (r->getUserID() == userId && r->getMovieID() == movieId) {
             return true; // 중복 발견
         }
     }
     return false; // 중복 없음
 }
 
-std::vector<Rating> RatingManager::getUserRatings(int userID) const {
-    std::vector<Rating> userRatings;
+std::vector<const Rating*> RatingManager::getUserRatings(int userID) const {
+    std::vector<const Rating*> userRatings;
     for (const auto& r : ratings) {
-        if (r.getUserID() == userID) {
-            userRatings.push_back(r);
+        if (r->getUserID() == userID) {
+            userRatings.push_back(r.get());
         }
     }
     return userRatings;
 }
 
-std::vector<Rating> RatingManager::getAllRatings() const {
+const std::vector<std::unique_ptr<Rating>>& RatingManager::getAllRatings() const {
     return ratings; // 모든 평점 반환
 }

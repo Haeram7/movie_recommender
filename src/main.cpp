@@ -26,9 +26,9 @@ int main() {
     // 평점 데이터를 기반으로 영화의 총 평점과 평가 수를 업데이트
     movieMgr.resetAllMovieRatings();
     for (const auto& rating : ratingMgr.getAllRatings()) {
-        Movie* movie = movieMgr.findbyId(rating.getMovieID());
+        Movie* movie = movieMgr.findbyId(rating->getMovieID());
         if (movie != nullptr) {
-            movie->addRating(rating.getScore());
+            movie->addRating(rating->getScore());
         }
     }
 
