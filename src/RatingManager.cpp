@@ -78,8 +78,7 @@ void RatingManager::displaybyMovie(int id, const std::string& title, const UserM
 
     // 검색된 결과가 없는 경우 처리
     if(filteredRatings.empty()) {
-        std::cout << "해당 영화에 대한 평가가 없습니다." << std::endl;
-        return;
+        throw std::runtime_error("해당 영화에 대한 평점이 존재하지 않습니다.");
     }
 
     std::sort(filteredRatings.begin(), filteredRatings.end(), [](const Rating* a, const Rating* b) {
@@ -107,7 +106,7 @@ void RatingManager::sortbyID() {
         if (a->getUserID() == b->getUserID()) {
             return a->getMovieID() < b->getMovieID(); // userID가 같으면 movieID로 정렬
         }
-        return a->getUserID() < b->getUserID(); // userID로 정렬
+        return a->getUserID() < b->getUserID(); 
     });
 }
 
@@ -115,10 +114,10 @@ void RatingManager::sortbyID() {
 bool RatingManager::hasAlreadyRated(int userId, int movieId) const {
     for (const auto& r : ratings) {
         if (r->getUserID() == userId && r->getMovieID() == movieId) {
-            return true; // 중복 발견
+            return true;
         }
     }
-    return false; // 중복 없음
+    return false; 
 }
 
 std::vector<const Rating*> RatingManager::getUserRatings(int userID) const {
