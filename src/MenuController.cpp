@@ -16,7 +16,6 @@ void MenuController::handleAddMovie() {
     std::cout << "개봉 연도: ";
     std::cin >> year;
     std::cin.ignore(100, '\n'); // 버퍼 정리
-
     Movie newMovie(title, genre, year);
     movieMgr.addMovie(newMovie); 
 }

@@ -8,8 +8,7 @@ UserManager::UserManager() {};
 
 void UserManager::printAll() const {
     if (users.empty()) {
-        std::cout << "등록된 사용자가 없습니다." << std::endl;
-        return; // 출력 후 바로 함수 종료
+        throw std::runtime_error("사용자 목록이 비어 있습니다.");
     }
     for (const auto &u : users){
         std::cout << *u << std::endl; // User 클래스의 operator << 오버로딩을 이용하여 사용자 정보 출력
@@ -71,8 +70,7 @@ void UserManager::saveToFile(const std::string& filename) const {
 void UserManager::addUser(const User &u) {
     for(const auto &user : users) {
         if(u.getName() == user->getName()) {
-            std::cout << "같은 사용자가 이미 존재합니다 : " << user->getName() << std::endl;
-            return; // 중복된 사용자 이름은 추가하지 않음
+            throw std::runtime_error("이미 동일한 이름의 사용자가 존재합니다.");
         }
     }
     users.push_back(std::make_unique<User>(u));

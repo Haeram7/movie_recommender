@@ -67,8 +67,7 @@ void MovieManager::saveToFile(const std::string& filename) const {
 void MovieManager::addMovie(const Movie& m) {
     for(const auto &movie : movies) {
         if(m.getTitle() == movie->getTitle()) {
-            std::cout << "같은 영화가 이미 존재합니다. : " << movie->getTitle() << std::endl;
-            return; // 중복된 영화는 추가하지 않음
+            throw std::runtime_error("이미 동일한 제목의 영화가 존재합니다.");
         }
     }
     movies.push_back(std::make_unique<Movie>(m));
