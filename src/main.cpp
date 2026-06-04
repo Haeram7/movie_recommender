@@ -57,9 +57,9 @@ int main() {
             std::cout << "데이터 저장 후 프로그램을 종료합니다." << std::endl;
             break;
         }
+        try {
         switch(choice) {
             case 1: controller.handleAddMovie(); break;
-            // 영화 제거 기능은 오류를 방지하기 위해 제거
             case 2: controller.handleSearchMovie(); break;
             case 3: controller.handlePrintMovies(); break;
             case 4: controller.handleSortMovie(); break;
@@ -70,8 +70,10 @@ int main() {
             case 9: controller.handleDisplayRatingsByMovie(); break;
             case 10: controller.handleRecommendation(); break;
             default: std::cout << "잘못된 선택입니다. 다시 시도해주세요." << std::endl; continue; // 잘못된 입력은 메뉴로 돌아가기
-        }
-        // 기능을 수행한 후 메뉴로 돌아가기 전
+            }
+        } catch (const std::exception& e) {
+            std::cout << "오류: " << e.what() << std::endl;
+        } 
     std::cout << "작업 완료. [엔터를 누르시면 메뉴로 돌아갑니다]";
 
     // 사용자가 새롭게 엔터를 칠 때까지 화면을 멈춤

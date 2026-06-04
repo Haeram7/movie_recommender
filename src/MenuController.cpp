@@ -23,18 +23,18 @@ void MenuController::handleAddMovie() {
 
 // 2. 제목으로 검색
 void MenuController::handleSearchMovie() {
-    if(movieMgr.isEmpty()) {
-        std::cout << "영화 목록이 비어 있습니다." << std::endl;
-        return;
+    if(movieMgr.isEmpty()) { 
+        throw std::runtime_error("영화 목록이 비어 있습니다."); 
     }
     std::string searchTitle;
     std::cout << "검색할 영화 제목: ";
     std::getline(std::cin, searchTitle);
 
     auto results = movieMgr.findbyTitle(searchTitle);
-    if (results.empty()) {
-        std::cout << "검색 결과가 없습니다." << std::endl;
-    } else {
+    if (results.empty()) { 
+        throw std::runtime_error("일치하는 영화가 없습니다.");
+    }
+    else {
         std::cout << "검색 결과:\n";
         for (const auto& m : results) {
             std::cout << *m << std::endl;
@@ -44,8 +44,7 @@ void MenuController::handleSearchMovie() {
 // 3. 전체 목록 출력
 void MenuController::handlePrintMovies() {
     if(movieMgr.isEmpty()) {
-        std::cout << "영화 목록이 비어 있습니다." << std::endl;
-        return;
+        throw std::runtime_error("영화 목록이 비어 있습니다.");
     }
     std::cout << " ===== 영화 목록 =====\n";
     movieMgr.printAll();
@@ -53,8 +52,7 @@ void MenuController::handlePrintMovies() {
 // 4. 평점순 정렬 출력
 void MenuController::handleSortMovie() {
     if(movieMgr.isEmpty()) {
-        std::cout << "영화 목록이 비어 있습니다." << std::endl;
-        return;
+        throw std::runtime_error("영화 목록이 비어 있습니다.");
     }
     movieMgr.sortbyRating();
     std::cout << "영화가 평점순으로 정렬되었습니다." << std::endl;
@@ -74,8 +72,7 @@ void MenuController::handleAddUser() {
 // 6. 사용자 목록 출력
 void MenuController::handlePrintUsers() {
     if(userMgr.isEmpty()) {
-        std::cout << "사용자 목록이 비어 있습니다." << std::endl;
-        return;
+        throw std::runtime_error("사용자 목록이 비어 있습니다.");
     }
     std::cout << " ===== 사용자 목록 =====\n";
     userMgr.printAll();
@@ -83,8 +80,7 @@ void MenuController::handlePrintUsers() {
 // 7. 사용자 별 평점 출력
 void MenuController::handleDisplayRatingsByUser() {
     if(userMgr.isEmpty()) {
-        std::cout << "사용자 목록이 비어 있습니다." << std::endl;
-        return;
+        throw std::runtime_error("사용자 목록이 비어 있습니다.");
     }
     std::string userName;
     std::cout << "평점을 볼 사용자 이름: ";
@@ -93,8 +89,7 @@ void MenuController::handleDisplayRatingsByUser() {
     if (user != nullptr) {
         std::vector<const Rating*> userRatings = ratingMgr.getUserRatings(user->getID());
         if (userRatings.empty()) {
-            std::cout << "해당 사용자가 평가한 영화가 없습니다." << std::endl;
-            return;
+            throw std::runtime_error("해당 사용자가 평가한 영화가 없습니다.");
         }
         std::sort(userRatings.begin(), userRatings.end(), [](const Rating* a, const Rating* b) {
             return a->getScore() > b->getScore();
@@ -106,7 +101,7 @@ void MenuController::handleDisplayRatingsByUser() {
             std::cout << "영화 제목: " << title << ", 평점: " << r->getScore() << std::endl;
         }
     } else {
-        std::cout << "일치하는 사용자가 목록에 없습니다." << std::endl;
+        throw std::runtime_error("일치하는 사용자가 목록에 없습니다.");
     }
 }
 
@@ -118,21 +113,18 @@ void MenuController::handleAddRating() {
     std::cout << "사용자 이름: ";
     std::getline(std::cin, userName);
     User* user = userMgr.findbyName(userName);
-    if (!user) {
-        std::cout << "일치하는 사용자가 목록에 없습니다." << std::endl;
-        return; // 일치하는 사용자가 없으면 종료
+    if (user == nullptr) {
+        throw std::runtime_error("일치하는 사용자가 목록에 없습니다.");
     }
 
     std::cout << "영화 제목: ";
     std::getline(std::cin, movieTitle);
     Movie* movie = movieMgr.findExactTitle(movieTitle);
     if (!movie) {
-        std::cout << "일치하는 영화가 목록에 없습니다." << std::endl;
-        return; // 영화 없으면 종료
+        throw std::runtime_error("일치하는 영화가 목록에 없습니다.");
     }
     if (ratingMgr.hasAlreadyRated(user->getID(), movie->getID())) {
-        std::cout << "이미 해당 영화에 평점을 남기셨습니다. 중복 평가는 불가능합니다." << std::endl;
-        return; // 평가를 막고 메인 메뉴로 돌려보냄
+        throw std::runtime_error("이미 해당 영화에 평점을 남기셨습니다. 중복 평가는 불가능합니다.");
     }
     std::cout << "점수 입력 (0.0 - 10.0): ";
     std::cin >> score;
@@ -147,8 +139,7 @@ void MenuController::handleAddRating() {
 // 9. 영화별 평점 보기
 void MenuController::handleDisplayRatingsByMovie() {
     if(movieMgr.isEmpty()) {
-        std::cout << "영화 목록이 비어 있습니다." << std::endl;
-        return;
+        throw std::runtime_error("영화 목록이 비어 있습니다.");
     }
 
     std::string movieTitle;
@@ -160,7 +151,7 @@ void MenuController::handleDisplayRatingsByMovie() {
     if (movie != nullptr) {
         ratingMgr.displaybyMovie(movie->getID(), movie->getTitle(), userMgr);
     } else {
-        std::cout << "일치하는 영화가 목록에 없습니다." << std::endl;
+        throw std::runtime_error("일치하는 영화가 목록에 없습니다.");
     }
 }
 // 10. 영화 추천
@@ -171,13 +162,12 @@ void MenuController::handleRecommendation() {
 
     User* user = userMgr.findbyName(userName);
     if (user == nullptr) {
-        std::cout << "일치하는 사용자가 목록에 없습니다." << std::endl;
-        return; // 일치하는 사용자가 없으면 종료
+        throw std::runtime_error("일치하는 사용자가 목록에 없습니다.");
     }
     std::cout << "사용자들의 평가를 분석 중... "<< std::endl;
     std::vector<Movie*> recommendations = recommender.recommendMovies(user->getID(), 4); // 상위 4명과 유사한 사용자들의 평점을 분석하여 최대 6개의 영화 추천
     if(recommendations.empty()) {
-        std::cout << "평가 데이터가 없거나 추천할 영화가 없습니다." << std::endl;
+        throw std::runtime_error("평가 데이터가 없거나 추천할 영화가 없습니다.");
     } 
     else {
         std::cout << "====== 추천 영화 목록 ======\n";
