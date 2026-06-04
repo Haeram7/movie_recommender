@@ -89,17 +89,9 @@ bool Movie::operator ==(const Movie& other) const {
 bool Movie::operator !=(const Movie& other) const {
     return !(*this == other);
 }
-/*
-bool Movie::operator <=(const Movie& other) const {
-    return !(*this > other);
-}
-
-bool Movie::operator >=(const Movie& other) const {
-    return !(*this < other);
-}*/
 
 std::ostream& operator<<(std::ostream& os, const Movie& m) {
     os << m.getTitle() << " (" << m.getReleaseYear() << ") - "
-       << m.getAverageRating() << " (" << m.getRatingCount() << " 개의 평가)" << '\n' << "---------------------------";
+       << m.getAverageRating() << " (" << m.getRatingCount() << " 개의 평가)" << '\n' << "---------------------------------";
     return os;
 }

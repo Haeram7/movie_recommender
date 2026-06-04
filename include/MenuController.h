@@ -4,6 +4,7 @@
 #include "UserManager.h"
 #include "RatingManager.h"
 #include "Recommender.h"
+#include "Color.h"
 
 class MenuController {
     private:
@@ -15,12 +16,13 @@ class MenuController {
         MenuController(MovieManager& movieMgr, UserManager& userMgr, RatingManager& ratingMgr, Recommender& recommender);
         void handleAddMovie();
         void handleSearchMovie();
-        void handlePrintMovies();
         void handleSortMovie();
+        void handlePlatformDashboard();
         void handleAddUser();
         void handlePrintUsers();
         void handleDisplayRatingsByUser();
         void handleAddRating();
         void handleDisplayRatingsByMovie();
         void handleRecommendation();
+        void printMenu() const;
 };

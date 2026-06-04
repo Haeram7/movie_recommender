@@ -1,4 +1,5 @@
 #include "RatingManager.h"
+#include "Color.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -86,7 +87,7 @@ void RatingManager::displaybyMovie(int id, const std::string& title, const UserM
 });
 
     // 제목 및 상세 평점 목록 출력
-    std::cout << "=== 영화 [" << title << "] 평점 목록 ===" << std::endl;
+    std::cout << Color:: MAGENTA <<"=== 영화 [" << title << "] 평점 목록 ===" << Color::RESET << std::endl;
     for(const auto &r : filteredRatings) {
         const User* user = userMgr.findbyId(r->getUserID());
         std::string name = (user != nullptr) ? user->getName() : "알 수 없는 사용자";
