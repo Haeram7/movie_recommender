@@ -76,9 +76,10 @@ void UserManager::addUser(const User &u) {
     users.push_back(std::make_unique<User>(u));
 }
 
-User* UserManager::findbyName(const std::string &name) {
+User* UserManager::findbyName(const std::string &name) const {
+    std::string lowerName = toLowerString(name);
     for(auto &u : users){
-        if(u->getName() == name){
+        if(toLowerString(u->getName()) == lowerName){
             return u.get(); // 일치하는 사용자가 있으면 해당 사용자 객체의 포인터를 반환
         }
     }
@@ -92,4 +93,11 @@ const User* UserManager::findbyId(int id) const {
         }
     }
     return nullptr;
+}
+
+std::string UserManager::toLowerString(std::string s) const {
+    std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
+        return std::tolower(c);
+    });
+    return s;
 }

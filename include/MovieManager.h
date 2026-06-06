@@ -3,6 +3,7 @@
 #include "BaseManager.h"
 #include <vector>
 #include <memory>
+#include <cctype>
 
 class MovieManager : public BaseManager{
 private: 
@@ -20,7 +21,8 @@ public:
     void sortbyRating();
     std::vector<Movie*> findbyTitle(const std::string& title) const;
     const std::vector<std::unique_ptr<Movie>>& getAllMovies() const;
-    Movie* findExactTitle(const std::string &title);
+    Movie* findExactTitle(const std::string &title) const;
     Movie* findbyId(int id);
-    void resetAllMovieRatings(); // 모든 영화의 평점 초기화 메서드 추가
+    void resetAllMovieRatings(); 
+    std::string toLowerString(std::string str) const;
 };

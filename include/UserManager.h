@@ -3,7 +3,8 @@
 #include "BaseManager.h"
 #include <vector>
 #include <memory>
-
+#include <cctype>
+#include <algorithm>
 class UserManager : public BaseManager {
     private:
         std::vector<std::unique_ptr<User>> users;
@@ -17,8 +18,9 @@ class UserManager : public BaseManager {
         void saveToFile(const std::string& filename) const override;
 
         void addUser(const User &u);
-        User* findbyName(const std::string &name);
+        User* findbyName(const std::string &name) const;
         
         const User* findbyId(int id) const;
+        std::string toLowerString(std::string str) const;
         
 };

@@ -82,9 +82,11 @@ void MovieManager::sortbyRating() {
 
 std::vector<Movie*> MovieManager::findbyTitle(const std::string &title) const{
     std::vector<Movie*> results;
+    std::string lowerSearch = toLowerString(title);
     for(const auto &m : movies){
-        if(m->getTitle().find(title) != std::string::npos){
-            results.push_back(m.get());
+        std::string lowerMovieTitle = toLowerString(m->getTitle());
+        if (lowerMovieTitle.find(lowerSearch) != std::string::npos) {
+            results.push_back(m.get()); 
         } // 사용자 편의성을 위해 제목에 검색어가 포함되어 있는 경우 결과에 추가
     }
     return results;
@@ -94,10 +96,11 @@ const std::vector<std::unique_ptr<Movie>>& MovieManager::getAllMovies() const {
     return movies; 
 }
 
-Movie* MovieManager::findExactTitle(const std::string &title) {
+Movie* MovieManager::findExactTitle(const std::string &title) const {
+    std::string lowerTarget = toLowerString(title);
     for (auto &m : movies) { 
-        if (m->getTitle() == title) {
-            return m.get(); // 일치하는 영화가 있으면 해당 영화 객체의 포인터를 반환
+        if (toLowerString(m->getTitle()) == lowerTarget) {
+            return m.get();
         }
     }
     return nullptr;
@@ -118,3 +121,9 @@ void MovieManager::resetAllMovieRatings() {
     }
 }
 
+std::string MovieManager::toLowerString(std::string s) const {
+    std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
+        return std::tolower(c);
+    });
+    return s;
+}

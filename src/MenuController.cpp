@@ -12,6 +12,9 @@ void MenuController::handleAddMovie() {
 
     std::cout << "영화 제목: ";
     std::getline(std::cin, title);
+    if (movieMgr.findExactTitle(title) != nullptr) {
+        throw std::runtime_error("이미 시스템에 동일한 이름의 영화가 존재합니다.");
+    }
     std::cout << "장르: ";
     std::getline(std::cin, genre);
     std::cout << "개봉 연도: ";
@@ -90,6 +93,9 @@ void MenuController::handleAddUser() {
     std::string name, email;
     std::cout << "사용자 이름: ";
     std::getline(std::cin, name);
+    if (userMgr.findbyName(name) != nullptr) {
+        throw std::runtime_error("동일한 이름의 사용자가 존재합니다.");
+    }
     std::cout << "이메일: ";
     std::getline(std::cin, email);
 
